@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import { createClient } from '@supabase/supabase-js';
 
@@ -8,6 +8,17 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  address: string | null;
+  lat: number | null;
+  long: number | null;
+  created_at: string;
+}
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -22,6 +33,24 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [users, setUsers] = useState<UserData[]>([]); // To store our users list
+
+  // Function to fetch users from Supabase
+  const fetchUsers = async () => {
+    const { data, error } = await supabase
+      .from('user')
+      .select('*')
+      .order('id', { ascending: false }); // Show newest users first
+
+    if (!error && data) {
+      setUsers(data);
+    }
+  };
+
+  // Fetch users automatically when the page loads
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +81,6 @@ export default function Home() {
     setLoading(true);
     setMessage('');
 
-    // Sending data straight to your custom "user" table
     const { error } = await supabase
       .from('user')
       .insert([
@@ -74,14 +102,15 @@ export default function Home() {
     } else {
       setMessage('✅ Registered successfully inside your Supabase database!');
       setFormData({ name: '', email: '', password: '', role: 'visitor', address: '', lat: '', long: '' });
+      fetchUsers(); // Refresh the users list immediately after a successful registration
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black py-12 px-4">
+    <div className="flex flex-col min-h-screen items-center justify-start bg-zinc-50 font-sans dark:bg-black py-12 px-4 gap-8">
+      
+      {/* Registration Form Box */}
       <main className="flex w-full max-w-md flex-col items-center justify-center p-8 bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800">
-        
-        {/* Next.js Logo */}
         <div className="mb-6">
           <Image
             className="dark:invert"
@@ -100,9 +129,7 @@ export default function Home() {
           Fill out your details to sign up directly to Supabase.
         </p>
 
-        {/* Form Container */}
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-          
           <div>
             <label className="block text-sm font-medium mb-1 text-zinc-700 dark:text-zinc-300">Full Name *</label>
             <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg text-black dark:text-white bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -148,14 +175,52 @@ export default function Home() {
           </button>
         </form>
 
-        {/* Success/Error Message Display */}
         {message && (
           <p className="mt-4 text-sm font-medium text-center p-2 rounded bg-zinc-100 dark:bg-zinc-800 w-full text-black dark:text-white">
             {message}
           </p>
         )}
-
       </main>
+
+      {/* Registered Users List Grid View */}
+      <section className="w-full max-w-2xl bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-zinc-200 dark:border-zinc-800">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-black dark:text-zinc-50">Registered Users ({users.length})</h2>
+          <button onClick={fetchUsers} className="text-xs bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-3 py-1 rounded-md text-black dark:text-white hover:bg-zinc-200 transition-all">
+            🔄 Refresh List
+          </button>
+        </div>
+
+        {users.length === 0 ? (
+          <p className="text-zinc-500 text-sm text-center py-4">No users found in database yet.</p>
+        ) : (
+          <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-1">
+            {users.map((u) => (
+              <div key={u.id} className="p-4 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg text-sm flex flex-col sm:flex-row sm:justify-between gap-2">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-black dark:text-white text-base">{u.name}</span>
+                    <span className="text-xs px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 font-medium text-zinc-800 dark:text-zinc-200 capitalize">
+                      {u.role}
+                    </span>
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400 mt-1">{u.email}</p>
+                  {u.address && <p className="text-zinc-500 dark:text-zinc-400 mt-1 text-xs">📍 {u.address}</p>}
+                </div>
+                <div className="text-left sm:text-right text-xs text-zinc-400 self-start sm:self-center">
+                  {u.lat && u.long && (
+                    <p className="font-mono text-zinc-500 dark:text-zinc-400 mb-1">
+                      {parseFloat(u.lat.toString()).toFixed(4)}, {parseFloat(u.long.toString()).toFixed(4)}
+                    </p>
+                  )}
+                  <p>{new Date(u.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
     </div>
   );
 }
