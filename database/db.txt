@@ -1,0 +1,39 @@
+-- 1. Drop the old table if it exists so we can start fresh
+drop table if exists "user";
+
+-- 2. Create the 'user' table with all your required fields
+create table "user" (
+  id bigint generated always as identity primary key,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  name text not null,
+  email text not null unique,
+  password text not null, -- Stores password text
+  role text default 'visitor', -- e.g., 'admin', 'user', 'visitor'
+  lat numeric, -- Stores precise latitude coordinates
+  long numeric, -- Stores precise longitude coordinates
+  address text
+);
+
+-- 3. Turn on Row Level Security (RLS)
+alter table "user" enable row level security;
+
+-- 4. Create a policy that allows anyone to read the rows
+create policy "Allow public read access"
+on "user" for select
+using (true);
+
+-- 5. Insert a complete sample row (Rawalpindi coordinates as an example)
+insert into "user" (name, email, password, role, lat, long, address)
+values (
+  'Ali Raza', 
+  'razaworld72575@gmail.com', 
+  'securepassword123', 
+  'admin', 
+  33.5651, 
+  73.0169, 
+  'Rawalpindi, Punjab, Pakistan'
+);
+-- Create an additional policy to allow public inserts into the "user" table
+create policy "Allow public inserts"
+on "user" for insert
+with check (true);
