@@ -16,7 +16,8 @@ interface FormData {
   city: string;
   lat: string;
   long: string;
-  jobtype: string;
+  jobType: string;
+  gender: string;
 }
 
 const initialFormData: FormData = {
@@ -27,7 +28,8 @@ const initialFormData: FormData = {
   city: '',
   lat: '',
   long: '',
-  jobtype: '',
+  jobType: '',
+  gender: '',
 };
 
 type MessageType = 'success' | 'error' | '';
@@ -105,7 +107,8 @@ export default function Home() {
         address: formData.city || null,
         lat: formData.lat ? parseFloat(formData.lat) : null,
         long: formData.long ? parseFloat(formData.long) : null,
-        jobtype: formData.jobtype || null,
+        jobType: formData.jobType || null,
+        gender: formData.gender || null,
       },
     ]);
 
@@ -211,14 +214,33 @@ export default function Home() {
               </select>
             </div>
 
+            {/* Gender */}
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
+                Gender
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-900 dark:text-white bg-white dark:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+
             {/* Job Type */}
             <div>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                 Job Type
               </label>
               <select
-                name="jobtype"
-                value={formData.jobtype}
+                name="jobType"
+                value={formData.jobType}
                 onChange={handleChange}
                 className="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-900 dark:text-white bg-white dark:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
