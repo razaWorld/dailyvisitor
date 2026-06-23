@@ -7,7 +7,7 @@ const ROLE_PREFIXES: Record<string, string> = {
   '/visitor': 'visitor',
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { response, supabase, user } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
@@ -41,9 +41,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Run on every route except static assets, images, and Next internals.
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|webp)$).*)',
   ],
 };
