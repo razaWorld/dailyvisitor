@@ -102,7 +102,7 @@ export default function SignupPage() {
       return;
     }
 
-    setMessage({ text: '✅ Account created! Check your email to confirm, then log in.', ok: true });
+    setMessage({ text: '✅ Account created! ', ok: true });
     setForm(initialForm);
     setTimeout(() => router.push('/login'), 1500);
   };
@@ -155,7 +155,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1.5">I am a *</label>
+            <label className="block text-sm font-medium mb-1.5">Role</label>
             <select
               name="role"
               value={form.role}
@@ -255,6 +255,13 @@ export default function SignupPage() {
               {message.text}
             </p>
           )}
+          
+        <p className="text-sm text-center text-zinc-500">
+          Already an account?{' '}
+          <a href="/login" className="text-blue-600 hover:underline">
+            Login
+          </a>
+        </p>
         </form>
       </div>
     </div>
