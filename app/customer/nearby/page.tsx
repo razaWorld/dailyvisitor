@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import MapPicker from '@/src/components/map/MapPicker';
 import { useNearbyVisitors } from '@/src/lib/hooks/useNearbyVisitors';
 import type { MapPoint } from '@/src/types/database';
 
@@ -45,19 +44,20 @@ export default function NearbyVisitorsPage() {
         </div>
       </div>
 
-      <MapPicker
-        initialCenter={center ?? undefined}
-        initialSelected={center}
-        onChange={setCenter}
-        nearby={visitors.map((v) => ({
-          id: v.visitor_profile_id,
-          lat: v.lat,
-          lng: v.long,
-          label: `${v.name} • ★ ${v.rating_avg.toFixed(1)}`,
-          distanceKm: v.distance_km,
-        }))}
-        height="450px"
-      />
+      {/* Map disabled — dummy placeholder until a map provider is wired up */}
+      <div
+        style={{ height: '450px' }}
+        className="w-full rounded-xl bg-zinc-100 dark:bg-zinc-800 flex flex-col items-center justify-center gap-2 p-4"
+      >
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">Map disabled</p>
+        {center ? (
+          <p className="text-sm font-mono text-zinc-700 dark:text-zinc-300">
+            {center.lat.toFixed(4)}, {center.lng.toFixed(4)}
+          </p>
+        ) : (
+          <p className="text-xs text-zinc-400">Use "📍 Use my location" to set a position</p>
+        )}
+      </div>
 
       {loading && <p className="text-sm text-zinc-500">Searching nearby providers…</p>}
       {error && <p className="text-sm text-red-600">❌ {error}</p>}
