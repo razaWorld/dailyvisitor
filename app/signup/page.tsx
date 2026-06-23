@@ -70,6 +70,15 @@ export default function SignupPage() {
     setLoading(true);
     setMessage(null);
 
+    const parsedLat = form.lat ? parseFloat(form.lat) : null;
+    const parsedLong = form.long ? parseFloat(form.long) : null;
+
+    if ((form.lat && Number.isNaN(parsedLat)) || (form.long && Number.isNaN(parsedLong))) {
+      setLoading(false);
+      setMessage({ text: '❌ Latitude/Longitude must be valid numbers', ok: false });
+      return;
+    }
+
     // 1. Create the Supabase Auth user (handles password hashing securely).
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: form.email,
@@ -89,8 +98,8 @@ export default function SignupPage() {
       email: form.email,
       role: form.role,
       address: form.address || null,
-      lat: form.lat ? parseFloat(form.lat) : null,
-      long: form.long ? parseFloat(form.long) : null,
+      lat: parsedLat,
+      long: parsedLong,
       job_type: form.jobType || null,
       gender: form.gender || null,
     });
@@ -188,7 +197,6 @@ export default function SignupPage() {
               onChange={handleChange}
               className="w-full px-4 py-2.5 border rounded-lg dark:bg-zinc-700"
             >
-              <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
@@ -255,13 +263,13 @@ export default function SignupPage() {
               {message.text}
             </p>
           )}
-          
-        <p className="text-sm text-center text-zinc-500">
-          Already an account?{' '}
-          <a href="/login" className="text-blue-600 hover:underline">
-            Login
-          </a>
-        </p>
+
+          <p className="text-sm text-center text-zinc-500">
+            Already an account?{' '}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Login
+            </a>
+          </p>
         </form>
       </div>
     </div>
