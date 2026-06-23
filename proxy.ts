@@ -33,7 +33,8 @@ export async function proxy(request: NextRequest) {
   const requiredRole = ROLE_PREFIXES[matchedPrefix];
 
   if (!profile || profile.role !== requiredRole) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url));
+    // return NextResponse.redirect(new URL('/unauthorized', request.url));
+    return NextResponse.redirect(new URL( request.url));
   }
 
   return response;
