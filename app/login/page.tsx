@@ -1,4 +1,3 @@
-```tsx
 'use client';
 
 import { Suspense, useState } from 'react';
@@ -92,7 +91,7 @@ function LoginForm() {
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="you@example.com"
-            className="w-full px-3.5 py-2.5 rounded-sm border border-zinc-700 bg-black text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40 transition-colors duration-150"
+            className="w-full px-3.5 py-2.5 rounded-sm border border-zinc-700 bg-black text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orang..."
           />
         </div>
 
@@ -106,14 +105,14 @@ function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className="w-full px-3.5 py-2.5 rounded-sm border border-zinc-700 bg-black text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40 transition-colors duration-150"
+            className="w-full px-3.5 py-2.5 rounded-sm border border-zinc-700 bg-black text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-oran..."
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-sm bg-orange-500 text-black font-semibold uppercase tracking-wide text-sm hover:bg-orange-400 active:bg-orange-600 disabled:opacity-50 transition-colors duration-150"
+          className="w-full py-3 rounded-sm bg-orange-500 text-black font-semibold uppercase tracking-wide text-sm hover:bg-orange-400 active:bg-orange-600 disabled:opacity-50 transition-colors d..."
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -190,4 +189,3 @@ export default function LoginPage() {
     </div>
   );
 }
-```
