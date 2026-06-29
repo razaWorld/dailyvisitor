@@ -46,7 +46,7 @@ export default function SignupPage() {
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
-      setMessage({ text: '❌ Geolocation not supported by your browser', ok: false });
+      setMessage({ text: 'Geolocation not supported by your browser', ok: false });
       return;
     }
 
@@ -57,10 +57,10 @@ export default function SignupPage() {
           lat: position.coords.latitude.toString(),
           long: position.coords.longitude.toString(),
         }));
-        setMessage({ text: '✅ Location detected', ok: true });
+        setMessage({ text: 'Location detected', ok: true });
       },
       () => {
-        setMessage({ text: '❌ Unable to get location. Check permissions.', ok: false });
+        setMessage({ text: 'Unable to get location. Check permissions.', ok: false });
       }
     );
   };
@@ -75,7 +75,7 @@ export default function SignupPage() {
 
     if ((form.lat && Number.isNaN(parsedLat)) || (form.long && Number.isNaN(parsedLong))) {
       setLoading(false);
-      setMessage({ text: '❌ Latitude/Longitude must be valid numbers', ok: false });
+      setMessage({ text: 'Latitude/Longitude must be valid numbers', ok: false });
       return;
     }
 
@@ -87,7 +87,7 @@ export default function SignupPage() {
 
     if (authError || !authData.user) {
       setLoading(false);
-      setMessage({ text: `❌ ${authError?.message ?? 'Signup failed'}`, ok: false });
+      setMessage({ text: authError?.message ?? 'Signup failed', ok: false });
       return;
     }
 
@@ -107,103 +107,100 @@ export default function SignupPage() {
     setLoading(false);
 
     if (profileError) {
-      setMessage({ text: `❌ ${profileError.message}`, ok: false });
+      setMessage({ text: profileError.message, ok: false });
       return;
     }
 
-    setMessage({ text: '✅ Account created! ', ok: true });
+    setMessage({ text: 'Account created. Redirecting to login…', ok: true });
     setForm(initialForm);
     setTimeout(() => router.push('/login'), 1500);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-zinc-50 dark:bg-zinc-950 px-4 py-10">
-      {/* Decorative background blobs */}
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-violet-400/30 dark:bg-violet-600/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-fuchsia-400/30 dark:bg-fuchsia-600/20 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-black text-zinc-100 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Masthead-style background texture */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(0deg, transparent, transparent 27px, #f97316 27px, #f97316 28px)',
+        }}
+      />
+      <div className="absolute -top-32 -right-32 w-[28rem] h-[28rem] bg-orange-600/20 rounded-full blur-[100px]" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-500/10 rounded-full blur-[90px]" />
 
       <div className="w-full max-w-md relative z-10">
-        {/* Brand mark */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/30 mb-4">
-            <span className="text-2xl">📰</span>
-          </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
-            Create your account
+        {/* Masthead */}
+        <div className="text-center mb-8 border-b-4 border-orange-500 pb-5">
+          <p className="text-[11px] font-bold tracking-[0.3em] text-orange-500 uppercase mb-1">
+            Edition No. 01
+          </p>
+          <h1 className="text-4xl font-black tracking-tight text-white uppercase">
+            Daily Vistory
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Join <span className="font-semibold text-violet-600 dark:text-violet-400">Daily Vistory</span> today
+          <p className="text-xs text-zinc-500 mt-2 tracking-wide">
+            Register for full access — front page and beyond
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white/80 dark:bg-zinc-900/70 backdrop-blur-xl rounded-3xl shadow-2xl shadow-zinc-900/10 dark:shadow-black/40 border border-zinc-200/70 dark:border-zinc-800 p-8 space-y-5"
+          className="bg-zinc-950 border border-zinc-800 rounded-none p-8 space-y-5 shadow-[0_0_40px_-10px_rgba(249,115,22,0.25)]"
         >
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
-              Full Name *
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
+              Full Name
             </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400">🧑</span>
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                required
-                placeholder="Your full name"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
-              />
-            </div>
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="Your full name"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
+            />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
-              Email *
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
+              Email
             </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400">✉️</span>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                required
-                placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
-              />
-            </div>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              placeholder="you@example.com"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
+            />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
-              Password *
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
+              Password
             </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400">🔒</span>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                required
-                minLength={6}
-                placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
-              />
-            </div>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+              placeholder="••••••••"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
+            />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
               Role
             </label>
             <select
               name="role"
               value={form.role}
               onChange={handleChange}
-              className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
             >
               <option value="customer">Customer</option>
               <option value="visitor">Visitor (Service Provider)</option>
@@ -212,7 +209,7 @@ export default function SignupPage() {
 
           {form.role === 'visitor' && (
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
                 Job Type
               </label>
               <input
@@ -220,20 +217,20 @@ export default function SignupPage() {
                 value={form.jobType}
                 onChange={handleChange}
                 placeholder="e.g. Milkman, Grocer, Delivery"
-                className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
               Gender
             </label>
             <select
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
             >
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -243,7 +240,7 @@ export default function SignupPage() {
 
           {/* Physical Address */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
               Physical Address
             </label>
             <textarea
@@ -252,13 +249,13 @@ export default function SignupPage() {
               onChange={handleChange}
               rows={2}
               placeholder="House #, Street, Area, City"
-              className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none"
+              className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm resize-none"
             />
           </div>
 
           {/* Lat / Long inputs */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
               Location Coordinates
             </label>
             <div className="flex gap-2 mb-2">
@@ -269,7 +266,7 @@ export default function SignupPage() {
                 placeholder="Latitude"
                 value={form.lat}
                 onChange={handleChange}
-                className="w-1/2 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                className="w-1/2 px-3 py-2 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
               />
               <input
                 type="number"
@@ -278,26 +275,26 @@ export default function SignupPage() {
                 placeholder="Longitude"
                 value={form.long}
                 onChange={handleChange}
-                className="w-1/2 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+                className="w-1/2 px-3 py-2 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
               />
             </div>
             <button
               type="button"
               onClick={handleGetLocation}
-              className="w-full py-2.5 px-3 text-sm font-medium text-violet-700 dark:text-violet-300 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50 border border-violet-200 dark:border-violet-900 rounded-xl transition-all"
+              className="w-full py-2.5 px-3 text-sm font-bold uppercase tracking-wide text-orange-400 bg-orange-950/30 hover:bg-orange-900/40 border border-orange-700/50 rounded-sm transition-colors"
             >
-              📍 Use my current location
+              Use my current location
             </button>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white font-semibold shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:scale-100 transition-all duration-200"
+            className="w-full py-3 bg-orange-500 hover:bg-orange-400 text-black font-black uppercase tracking-wide text-sm rounded-sm shadow-[0_0_25px_-5px_rgba(249,115,22,0.6)] disabled:opacity-50 transition-colors duration-150"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                 Creating account…
               </span>
             ) : (
@@ -307,28 +304,27 @@ export default function SignupPage() {
 
           {message && (
             <div
-              className={`flex items-start gap-2 text-sm rounded-xl px-3 py-2 border ${
+              className={`text-sm px-3 py-2 border-l-4 ${
                 message.ok
-                  ? 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-900'
-                  : 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900'
+                  ? 'text-orange-300 bg-orange-950/30 border-orange-500'
+                  : 'text-red-400 bg-red-950/30 border-red-500'
               }`}
             >
-              <span>{message.text}</span>
+              {message.text}
             </div>
           )}
 
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
-            </div>
+          <div className="border-t border-zinc-800 pt-4">
+            <p className="text-sm text-center text-zinc-500">
+              Already have an account?{' '}
+              <a
+                href="/login"
+                className="font-bold text-orange-500 hover:text-orange-400 hover:underline transition-colors"
+              >
+                Log in
+              </a>
+            </p>
           </div>
-
-          <p className="text-sm text-center text-zinc-500 dark:text-zinc-400">
-  Already have an account?{' '}
-  <a href="/login" className="font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 hover:underline transition-colors">
-    Login
-  </a>
-</p>
         </form>
       </div>
     </div>
