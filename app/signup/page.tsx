@@ -212,13 +212,20 @@ export default function SignupPage() {
               <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-orange-500 mb-1.5">
                 Job Type
               </label>
-              <input
+              <select
                 name="jobType"
                 value={form.jobType}
                 onChange={handleChange}
-                placeholder="e.g. Milkman, Grocer, Delivery"
-                className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white placeholder:text-zinc-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
-              />
+                required
+                className="w-full px-3.5 py-2.5 bg-black border border-zinc-700 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors rounded-sm"
+              >
+                <option value="">Select job type</option>
+                <option value="milkman">Milkman</option>
+                <option value="grocer">Grocer</option>
+                <option value="delivery">Delivery</option>
+                <option value="electrician">Electrician</option>
+                <option value="plumber">Plumber</option>
+              </select>
             </div>
           )}
 
